@@ -35,5 +35,27 @@ avaliacoes <- avaliacoes %>% distinct() %>% group_by(id, matricula) %>%
 avaliacoes %>% distinct() %>% group_by(id, matricula) %>% 
   summarise(avaliacao_diff = n()) %>% filter(avaliacao_diff > 1) %>% nrow()
 
-# Escreve dataframe em arquivo
+head(avaliacoes)
+# Coletando matricula e grupo
+mduplicada <- dff %>% select(matricula, grupo_avaliando) %>% 
+  filter(!is.na(matricula)) %>% distinct() %>% 
+  group_by(matricula) %>% summarise(ngrupos = n()) %>% 
+  filter(ngrupos > 1)
+
+# Quais os grupos das matrículas duplicadas
+dff %>% select(matricula, grupo_avaliando) %>% 
+  filter(!is.na(matricula)) %>% distinct() %>%
+  filter(matricula %in% mduplicada$matricula) %>% 
+  arrange(matricula, grupo_avaliando)
+
+# Quantas vezes uma matricula duplicada está associada a um grupo
+dff %>% select(matricula, grupo_avaliando, id) %>% 
+  filter(!is.na(matricula)) %>% 
+  filter(matricula %in% mduplicada$matricula) %>% 
+  group_by(matricula, grupo_avaliando) %>% 
+  summarise(noccor = n()) %>% 
+  top_n(1, noccor)
+  
+
+  # Escreve dataframe em arquivo
 write.csv(avaliacoes, file = "data/3-avaliacao-humana/avaliacoes-20180912.csv", row.names = F)
