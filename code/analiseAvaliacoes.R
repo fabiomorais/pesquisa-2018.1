@@ -19,6 +19,21 @@ p <- ggplot(percentuais, aes(as.factor(avaliacao), total, fill = as.factor(avali
   xlab("Avaliação") + ylab("Percentual") + 
   scale_y_continuous(labels = percent, 
                      limits = c(0, 0.5))
+p
 
+percentuais <- percentuais %>% 
+  mutate(tipo = ifelse(avaliacao > 3, "Muito negativo", ifelse(avaliacao < 3, "Pouco negativo", "Normal")))
 
-summary(dff$avaliacao)
+ggplot(percentuais, aes(avaliacao, total, fill = tipo)) + 
+  geom_bar(stat = "identity") +
+  xlab("Avaliçãoes") +
+  ylab("Percentual") + 
+  scale_y_continuous(labels = percent, limits = c(0, 0.5)) +
+  scale_fill_hue("Grau negatividade") + 
+  theme_bw(base_size = 10)
+
+  # Qual a divergência entre o mesmo grupo?
+dff %>% group_by(grupo, id) %>% 
+  summarise(diff = max(avaliacao) - min(avaliacao)) %>% 
+  ungroup() %>% group_by(grupo) %>% 
+  summarise(max = max(diff), media = mean(diff), min = min(diff))

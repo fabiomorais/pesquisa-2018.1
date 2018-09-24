@@ -21,6 +21,7 @@ nrow(dff)
 avaliacoes <- dff %>% select(id, matricula, avaliacao) %>% filter(!is.na(matricula) & !is.na(avaliacao))
 nrow(avaliacoes)
 glimpse(avaliacoes)
+head(avaliacoes)
 
 # Existem avaliações distintas de uma mesma matrícula para uma mesma reclamação?
 avaliacoes %>% distinct() %>% group_by(id, matricula) %>% 
@@ -59,12 +60,17 @@ dff %>% select(matricula, grupo_avaliando, id) %>%
 grupos <- dff %>% select(matricula, grupo_avaliando, id) %>% 
   filter(!is.na(matricula)) %>% 
   group_by(matricula, grupo_avaliando) %>% 
-  summarise(noccor = n()) %>% 
-  top_n(1, noccor)
+  summarise(noccor = n()) %>% ungroup() %>%
+  group_by(matricula) %>%
+  top_n(1, noccor) %>% select(-noccor)
 
 
 head(avaliacoes)
 head(grupos)
+
+avaliacoes %>% left_join(grupos, by = "matricula") %>% 
+  select(id, matricula, grupo = grupo_avaliando, avaliacao)
+
 
 # Fazendo join ente df com matriculas e grupos e df com avaliações por matricula
 avaliacoes <- avaliacoes %>% left_join(grupos, by = "matricula") %>% 
