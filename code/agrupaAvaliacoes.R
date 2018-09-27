@@ -76,5 +76,6 @@ avaliacoes %>% left_join(grupos, by = "matricula") %>%
 avaliacoes <- avaliacoes %>% left_join(grupos, by = "matricula") %>% 
   select(id, matricula, grupo = grupo_avaliando, avaliacao)
 
+head(avaliacoes)
 # Escreve dataframe em arquivo
 write.csv(avaliacoes, file = "data/3-avaliacao-humana/avaliacoes-20180912.csv", row.names = F)
