@@ -9,11 +9,15 @@ glimpse(avaliacoes)
 avaliacoes <- avaliacoes %>% rename(id.reclamacao = id)
 glimpse(avaliacoes)
 
+head(avaliacoes)
 avaliacoes <- avaliacoes %>% select(id.reclamacao, avaliacao) %>% 
               group_by(id.reclamacao) %>% 
               summarise(insatisfacao = median(avaliacao), 
                         avaliadores = n(),
                         range.avaliacoes = (max(avaliacao) - min(avaliacao)))
+
+head(avaliacoes)
+avaliacoes
 
 #quantas avaliações tem discordancia de avaliação maior que 2? Será que devemos confiar nessas avaliações?
 avaliacoes %>% filter(range.avaliacoes > 2) 
