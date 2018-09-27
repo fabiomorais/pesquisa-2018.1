@@ -65,6 +65,7 @@ sentimentos = palavras_com_sentimento %>%
               palavras_sent = sum(!is.na(sent)), 
               palavras = n())
 
+head(sentimentos)
 sentimentos %>% 
     write_csv(here("data/5-sentimentos/sentimento.csv"))
 ```
