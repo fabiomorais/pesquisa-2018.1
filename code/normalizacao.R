@@ -14,3 +14,7 @@ exemplo_2_normalizado = exemplo_2 %>% mutate(valor_normalizado = (valor - min(va
 # O maior valor dos dataframes normalizados é igual a 1 e o menor é igual a zero
 summary(exemplo_1_normalizado$valor_normalizado)
 summary(exemplo_2_normalizado$valor_normalizado)
+
+a <- data.frame(nome = c("ana", "pedro", "jose"), 
+                nota = c(10, 3, 7))
+a %>% mutate(normalizado = (nota - min(nota))/(max(nota)-min(nota)))
