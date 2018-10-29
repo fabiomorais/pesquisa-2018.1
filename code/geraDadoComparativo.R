@@ -64,9 +64,27 @@ ggplot(dff, aes(tipo, mediana)) +
   scale_y_continuous(breaks = seq(0, 1, 0.05))
 
 # Calcula o erro absoluto para a avaliação humana em relação as avaliações auto.
-resultado <- resultado %>% group_by(id) %>% 
+resultado_erro <- resultado %>% group_by(id) %>% 
   mutate(erro_op30 = op30 - humana,
          erro_sent = sent - humana)
+
+# 
+
+# Calcula e gera visualização do intervalo de confiança
+library(Rmisc)
+res_trans
+CI(seq(1,100))
+resultado_ic <- res_trans %>% 
+  dplyr::group_by(tipo) %>% 
+  dplyr::summarise(media = CI(valor)[2], 
+                   sup = CI(valor)[1], 
+                   inf = CI(valor)[3])
+
+# Análise por intervalo de confiança
+ggplot(resultado_ic, aes(tipo, media)) + 
+  geom_errorbar(aes(ymin=inf, ymax=sup)) + 
+  geom_point() + 
+  ylab("Insatisfação") + xlab("Tipo da avaliação")
 
 # Outras visualizações sobre o erro que podem ser realizadas
 # Estudem boxplot
